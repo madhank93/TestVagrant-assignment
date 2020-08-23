@@ -11,7 +11,7 @@ public class ChromeDriverManager implements IDriver {
 	private final ThreadLocal<WebDriver> driver = new ThreadLocal<WebDriver>();
 	private final ChromeOptions options = new ChromeOptions();
 	
-	// this class not available outside of this package, create driver object using DriverFactory class
+	// this class not available outside of this package, use DriverFactory class to create driver object
 	ChromeDriverManager() {
 		super();
 	}

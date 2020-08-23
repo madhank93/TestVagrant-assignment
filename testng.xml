@@ -5,6 +5,8 @@
 		<classes>
 			<class
 				name="com.testvagrant.drivermanager.DriverFactory" />
+				<class
+				name="com.testvagrant.testcases.NDTVWeatherPageTest" />
 		</classes>
 	</test> <!-- Test -->
 </suite> <!-- Suite -->
