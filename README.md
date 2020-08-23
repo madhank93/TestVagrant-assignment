@@ -22,8 +22,8 @@ git clone https://github.com/madhank93/TestVagrant-assignment.git
 		- DriverFactory.java
 		- FirefoxDriverManager.java
 		- IDriver.java
-		- InternetExplorerDriverManager.java
-		- SafariDriverManager.java
+		- InternetExplorerDriverManager.java // Not yet implemented
+		- SafariDriverManager.java // Not yet implemented
 	- com.testvagrant.model
 		- VarianceModel.java
 		- WeatherModel.java
