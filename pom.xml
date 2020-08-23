@@ -15,7 +15,8 @@
 		<assertj-core.version>3.16.1</assertj-core.version>
 		<testng.version>7.3.0</testng.version>
 		<rest-assured.version>4.3.1</rest-assured.version>
-		<test-suite>testSuite.xml</test-suite>
+		<test-suite>testng.xml</test-suite>
+		<webdrivermanager.version>4.1.0</webdrivermanager.version>
 	</properties>
 
 	<dependencies>
@@ -43,6 +44,12 @@
 			<artifactId>assertj-core</artifactId>
 			<version>${assertj-core.version}</version>
 			<scope>test</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager -->
+		<dependency>
+			<groupId>io.github.bonigarcia</groupId>
+			<artifactId>webdrivermanager</artifactId>
+			<version>${webdrivermanager.version}</version>
 		</dependency>
 	</dependencies>
 
