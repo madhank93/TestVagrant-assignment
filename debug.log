@@ -1,1 +1,6 @@
 [0823/172021.772:ERROR:file_io.cc(89)] ReadExactly: expected 36, observed 0
+[0823/224844.482:ERROR:file_io.cc(89)] ReadExactly: expected 36, observed 0
+[0824/002909.232:ERROR:file_io.cc(89)] ReadExactly: expected 36, observed 0
+[0824/003950.699:ERROR:file_io.cc(89)] ReadExactly: expected 36, observed 0
+[0824/020229.315:ERROR:file_io.cc(89)] ReadExactly: expected 36, observed 0
+[0824/020240.845:ERROR:file_io.cc(89)] ReadExactly: expected 36, observed 0

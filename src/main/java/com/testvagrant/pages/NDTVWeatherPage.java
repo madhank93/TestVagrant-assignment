@@ -45,6 +45,9 @@ public class NDTVWeatherPage extends BasePage {
 	@FindBy(xpath = "//*[contains(@href, 'close')]")
 	private WebElement popClose;
 	
+	@FindBy(className = "leaflet-popup-content-wrapper")
+	private WebElement mapPopup;
+	
 	private final String selectCityInCheckbox = "//div[@id='messages']//input[@id='%s']";
 	
 	private final String selectCityInMap = "//div[contains(text(),'%s')]";
@@ -95,9 +98,11 @@ public class NDTVWeatherPage extends BasePage {
 	public WeatherModel getTempDetailsAsWeatherObject() {
 		Number hum=null, deg=null, far=null;
 		
-		String humTemp = humidity.getText().replaceAll("[^0-9\\.]", "");
-		String degTemp = degrees.getText().replaceAll("[^0-9\\.]", "");
-		String farTemp = fahrenheit.getText().replaceAll("[^0-9\\.]", "");
+		waitTillVisibilityOfElement(3, mapPopup);
+		
+		String humTemp = humidity.getText().replaceAll("[^0-9\\.]", "").trim();
+		String degTemp = degrees.getText().replaceAll("[^0-9\\.]", "").trim();
+		String farTemp = fahrenheit.getText().replaceAll("[^0-9\\.]", "").trim();
 		
 		popClose.click();
 		

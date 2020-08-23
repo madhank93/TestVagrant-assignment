@@ -9,6 +9,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.testng.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.testvagrant.drivermanager.DriverFactory;
 import com.testvagrant.model.WeatherModel;
@@ -19,6 +20,7 @@ public class NDTVWeatherPageTest {
 
 	private BasePage basepage;
 	private PropertyReader property = new PropertyReader();
+	static HashMap<String, WeatherModel> weatherUiObj = new HashMap<String, WeatherModel>();
 
 	@BeforeMethod
 	public void createDriver() {
@@ -78,11 +80,18 @@ public class NDTVWeatherPageTest {
 	public void validateWeatherDetailsDisplayedForACity(String city) {
 		WeatherModel weatherObj = basepage.goToNDTVHomePage(property.getProperty("url")).goToWeatherPage().unSelectAllCities()
 				.selectACityInCheckBox(city).clickOnACityInMap(city).getTempDetailsAsWeatherObject();
+		
+		weatherUiObj.put(city, weatherObj);
 
 		assertThat(weatherObj).isNotNull().matches(element -> element.getHumidity().floatValue() >= 0
 				&& element.getTempInDegrees().floatValue() >= 0 && element.getTempInFahrenheit().floatValue() >= 0);
+	} 
+	
+	@Test
+	public static HashMap<String, WeatherModel> uiObjects() {
+		return weatherUiObj;
 	}
-
+	
 	@AfterMethod
 	public void driverQuit() {
 		basepage.tearDown();

@@ -41,6 +41,16 @@ public class BasePage {
 	public void waitTillVisibilityOfAllElements(long timeOutInSeconds, List<WebElement> elementsToBeVisible) {
 		setExplicitWaitTimeOutAndWait(timeOutInSeconds).until(visibilityOfAllElements(elementsToBeVisible));
 	}
+	
+	public void sleep(long milliSeconds) {
+		try {
+			Thread.sleep(milliSeconds);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void waitForJSandJQueryToLoad() {
 

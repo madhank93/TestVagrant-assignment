@@ -17,8 +17,9 @@ import io.restassured.response.Response;
 public class OpenWeatherAPITest {
 	
 	private final PropertyReader property = new PropertyReader();
+	static HashMap<String, WeatherModel> weatherApiObj = new HashMap<String, WeatherModel>();
 	private final String path = "data/2.5/weather";
-	APIHelper apiHelper;
+	private APIHelper apiHelper;
 	
 	
 	@BeforeMethod
@@ -34,8 +35,7 @@ public class OpenWeatherAPITest {
 		queryParams.put("units", "metric");
 		queryParams.put("appid", property.getProperty("apiKey"));
 		
-		apiHelper.setQueryParams(queryParams);
-		Response val = apiHelper.createRequest("get", path);
+		Response val = apiHelper.createRequest("get", path, queryParams);
 		
 		assertThat(val.getStatusCode()).isEqualTo(200);
 	}
@@ -47,8 +47,7 @@ public class OpenWeatherAPITest {
 		queryParams.put("units", "metric");
 		queryParams.put("appid", "invalid");
 		
-		apiHelper.setQueryParams(queryParams);
-		Response val = apiHelper.createRequest("get", path);
+		Response val = apiHelper.createRequest("get", path, queryParams);
 		String errorMsg = val.getBody().jsonPath().get("message");
 		
 		assertThat(val.getStatusCode()).isEqualTo(401);
@@ -62,8 +61,7 @@ public class OpenWeatherAPITest {
 		queryParams.put("units", "metric");
 		queryParams.put("appid", property.getProperty("apiKey"));
 		
-		apiHelper.setQueryParams(queryParams);
-		Response val = apiHelper.createRequest("get", path);
+		Response val = apiHelper.createRequest("get", path, queryParams);
 		String errorMsg = val.getBody().jsonPath().get("message");
 		
 		assertThat(val.getStatusCode()).isEqualTo(404);
@@ -82,8 +80,7 @@ public class OpenWeatherAPITest {
 		queryParams.put("units", "metric");
 		queryParams.put("appid", property.getProperty("apiKey"));
 		
-		apiHelper.setQueryParams(queryParams);
-		Response response = apiHelper.createRequest("get", path);
+		Response response = apiHelper.createRequest("get", path, queryParams);
 		String cityName = response.getBody().jsonPath().get("name");
 		
 		assertThat(cityName).isEqualTo(city);
@@ -96,19 +93,22 @@ public class OpenWeatherAPITest {
 		queryParams.put("units", "metric");
 		queryParams.put("appid", property.getProperty("apiKey"));
 		
-		apiHelper.setQueryParams(queryParams);
-		Response responseMetric = apiHelper.createRequest("get", path);
+		Response responseMetric = apiHelper.createRequest("get", path, queryParams);
 		
-		queryParams.replace("units", "metric");
-		apiHelper.setQueryParams(queryParams);
-		Response responseImperial = apiHelper.createRequest("get", path);
+		queryParams.replace("units", "imperial");
+		Response responseImperial = apiHelper.createRequest("get", path, queryParams);
 		
 		WeatherModel obj = apiHelper.JsonTOObject(responseMetric, responseImperial);
+
+		weatherApiObj.put(city, obj);
 		
 		assertThat(obj).isNotNull().matches(element -> element.getHumidity().floatValue() >= 0
 				&& element.getTempInDegrees().floatValue() >= 0 && element.getTempInFahrenheit().floatValue() >= 0);
-		
-		
+	}
+	
+	@Test
+	public static HashMap<String, WeatherModel> apiObjects() {
+		return weatherApiObj;
 	}
 	
 }

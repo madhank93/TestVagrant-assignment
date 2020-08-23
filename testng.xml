@@ -3,12 +3,14 @@
 <suite name="Suite">
 	<test name="Test">
 		<classes>
-			<!-- <class
+			<class
 				name="com.testvagrant.drivermanager.DriverFactory" />
 				<class
-				name="com.testvagrant.testcases.NDTVWeatherPageTest" /> -->
+				name="com.testvagrant.testcases.NDTVWeatherPageTest" />
 				<class
 				name="com.testvagrant.testcases.OpenWeatherAPITest" />
+				<class
+				name="com.testvagrant.testcases.WeatherComparator" />
 		</classes>
 	</test> <!-- Test -->
 </suite> <!-- Suite -->
