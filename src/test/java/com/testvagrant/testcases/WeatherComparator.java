@@ -1,11 +1,10 @@
 package com.testvagrant.testcases;
 
-import static org.testng.Assert.assertTrue;
-
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.HashMap;
 
+import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -24,40 +23,45 @@ public class WeatherComparator {
 	}
 
 	@Test(dataProvider = "Cities")
-	public void compare(String city) {
+	public void compareWeatherDetailsOfApiAndUiWithVariance(String city) {
 		property.readPropertiesFile("src/test/resources/comparator.properties");
 
-		HashMap<String, WeatherModel> ui = NDTVWeatherPageTest.uiObjects();
-		WeatherModel uiTmp = ui.get(city);
-		HashMap<String, WeatherModel> api = OpenWeatherAPITest.apiObjects();
-		WeatherModel apiTmp = api.get(city);
+		HashMap<String, WeatherModel> uiWeatherDetails = NDTVWeatherPageTest.uiObjects();
+		HashMap<String, WeatherModel> apiWeatherDetails = OpenWeatherAPITest.apiObjects();
+		VarianceModel variance = new VarianceModel(Integer.parseInt(property.getProperty("humidityVariance")),
+				Integer.parseInt(property.getProperty("celsiusVariance")),
+				Integer.parseInt(property.getProperty("fahrenheitVariance")));
 
-		int humTemp = Integer.parseInt(property.getProperty("humidityVariance"));
-		int celTemp = Integer.parseInt(property.getProperty("celsiusVariance"));
-		int varTemp = Integer.parseInt(property.getProperty("fahrenheitVariance"));
-		VarianceModel var = new VarianceModel(humTemp, celTemp, varTemp);
+		IWeatherComparator weatherComparator = (uiObj, apiObj, varObj) -> {
 
-		IWeatherComparator result = (uiObj, apiObj, varObj) -> {
-			
 			MathContext mtx = new MathContext(4);
-			BigDecimal humRes = new BigDecimal(uiObj.getHumidity().floatValue())
+			BigDecimal humidityResult = new BigDecimal(uiObj.getHumidity().floatValue())
 					.subtract(new BigDecimal(apiObj.getHumidity().floatValue())).round(mtx);
-			
-			BigDecimal celRes = new BigDecimal(uiObj.getTempInDegrees().floatValue())
-					.subtract(new BigDecimal(apiObj.getTempInDegrees().floatValue())).round(mtx);
-			
-			BigDecimal farRes = new BigDecimal(uiObj.getTempInFahrenheit().floatValue())
-					.subtract(new BigDecimal(apiObj.getTempInFahrenheit().floatValue())).round(mtx);
 
-			if (humRes.floatValue() > varObj.getHumidity() || celRes.floatValue() > varObj.getTempInDegrees()
-					|| farRes.floatValue() > varObj.getTempInFahrenheit()) {
-				return false;
+			if (humidityResult.abs().floatValue() > varObj.getHumidity()) {
+				Assert.fail("Humidity difference of UI and API is greater." + " " + "Humidity: " + humidityResult.abs()
+						+" " + "Maximum variance allowed is: " + varObj.getHumidity());
 			}
 
-			return true;
+			BigDecimal celsiusResult = new BigDecimal(uiObj.getTempInDegrees().floatValue())
+					.subtract(new BigDecimal(apiObj.getTempInDegrees().floatValue())).round(mtx);
+
+			if (celsiusResult.abs().floatValue() > varObj.getTempInDegrees()) {
+				Assert.fail("Celsius difference of UI and API is greater."+ " " + "Celsius: " + celsiusResult.abs()
+						+ " "+ "Maximum variance allowed is: " + varObj.getTempInDegrees());
+			}
+
+			BigDecimal fahrenheitResult = new BigDecimal(uiObj.getTempInFahrenheit().floatValue())
+					.subtract(new BigDecimal(apiObj.getTempInFahrenheit().floatValue())).round(mtx);
+
+			if (fahrenheitResult.abs().floatValue() > varObj.getTempInFahrenheit()) {
+				Assert.fail("Fahrenheit difference of UI and API is greater." + " "+ "Fahrenheit: " + fahrenheitResult.abs()
+						+" "+ "Maximum variance allowed is: " + varObj.getTempInFahrenheit());
+			}
+
 		};
 
-		assertTrue(result.compareWeather(uiTmp, apiTmp, var));
+		weatherComparator.compare(uiWeatherDetails.get(city), apiWeatherDetails.get(city), variance);
 
 	}
 
