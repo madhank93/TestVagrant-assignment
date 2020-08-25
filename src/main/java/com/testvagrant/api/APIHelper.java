@@ -28,7 +28,7 @@ public class APIHelper {
 	public Response createRequest(String requestType, String path, HashMap<String, String> queryParams) {
 		Response response = null;
 
-		switch (requestType) {
+		switch (requestType.toLowerCase().trim()) {
 		case "get":
 			response = getRequest(queryParams).get(path);
 			break;
@@ -38,13 +38,12 @@ public class APIHelper {
 			break;
 
 		default:
-			response = getRequest(queryParams).get(path);
 			break;
 		}
 		return response;
 	}
 
-	public WeatherModel JsonTOObject(Response metric, Response imperial) {
+	public WeatherModel jsonTOObject(Response metric, Response imperial) {
 		Number hum = null, cel = null, far = null;
 
 		String humTemp = metric.getBody().jsonPath().getString("main.humidity");

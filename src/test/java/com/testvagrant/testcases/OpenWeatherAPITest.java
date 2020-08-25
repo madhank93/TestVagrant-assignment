@@ -98,7 +98,7 @@ public class OpenWeatherAPITest {
 		queryParams.replace("units", "imperial");
 		Response responseImperial = apiHelper.createRequest("get", path, queryParams);
 		
-		WeatherModel obj = apiHelper.JsonTOObject(responseMetric, responseImperial);
+		WeatherModel obj = apiHelper.jsonTOObject(responseMetric, responseImperial);
 
 		weatherApiObj.put(city, obj);
 		

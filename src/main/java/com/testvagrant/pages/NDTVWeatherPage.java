@@ -92,6 +92,7 @@ public class NDTVWeatherPage extends BasePage {
 	}
 	
 	public boolean checkWeatherElementsAreDisplayed(){
+		waitTillVisibilityOfElement(3, mapPopup);
 		return humidity.isDisplayed() && degrees.isDisplayed() && fahrenheit.isDisplayed(); 
 	}
 
